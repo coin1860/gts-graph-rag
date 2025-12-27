@@ -10,6 +10,10 @@
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%2014%20%7C%20Tailwind-000000?style=flat-square)](./frontend)
 [![Database](https://img.shields.io/badge/Data-Neo4j%20%7C%20ChromaDB-018bff?style=flat-square)](./data)
 
+<br/>
+
+![GTS GraphRAG Chat Interface](docs/images/gts-graph-rag.png)
+
 </div>
 
 ## 📖 Introduction
@@ -163,6 +167,8 @@ npm run dev
 - **Document Management**: Upload PDFs, Text files, or ingest Confluence URLs.
 - **Graph Visualization**: View the underlying knowledge graph nodes and edges.
 - **User Management**: Manage system access roles.
+
+![Admin Portal](docs/images/admin-portal.png)
 
 ---
 
