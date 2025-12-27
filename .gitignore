@@ -1,0 +1,52 @@
+# Environment files
+.env
+.env.local
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.uv/
+.pytest_cache/
+.ruff_cache/
+
+# Virtual Environment artifacts in root
+bin/
+include/
+lib/
+pyvenv.cfg
+.lock
+
+# Database & Data
+data/chroma/
+data/app.db
+data/uploads/
+# Keep mock_data for development if needed, but usually ignore if it has real info
+# data/mock_data/
+
+# Logs
+*.log
+backend.log
+frontend.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node.js
+node_modules/
+frontend/.next/
+frontend/out/
+*.tsbuildinfo
+next-env.d.ts
+
+# OS
+.DS_Store
+Thumbs.db
+

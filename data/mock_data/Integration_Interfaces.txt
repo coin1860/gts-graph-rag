@@ -1,0 +1,18 @@
+# BOI Integration and Interface Specifications
+
+The integration layer bridges the gap between Core HSBC systems and local regional requirements.
+
+## Interface Categories
+1. **Core Interfaces (Global)**: Standardized APIs used by major hubs (HK, UK, US). Totaling 25 main interfaces.
+2. **Local Interfaces (Regional)**: Customized connectors for country-specific regulations and legacy batch systems. Totaling 35+ interfaces.
+
+## Downstream Systems
+BOI interacts with:
+- **HUB-Core**: Main global ledger.
+- **Regional-Batch-Processor (RBP)**: Local end-of-day settlement systems.
+- **Regulatory-Reporting-Node (RRN)**: Real-time reporting to local central banks.
+
+## Connectivity Methods
+- **RESTful APIs**: Standard for modern microservice communication.
+- **SFTP/MFT**: Still used for high-volume batch files with local legacy systems in certain European and Asian branches.
+- **MQ (Message Queuing)**: Primary method for asynchronous event-driven integration between the BOI Orchestrator and the Transaction Ledger.

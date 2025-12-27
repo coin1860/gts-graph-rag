@@ -1,0 +1,21 @@
+# Handover and Knowledge Transfer: BOI Integration Layer
+
+## Context
+Current Architect: Shane (transitioning to Engineering next month).
+Objective: Ensure seamless knowledge transfer for the Back Office Integration (BOI) layer due to its extreme complexity.
+
+## Current Pain Points
+- **Complexity**: 60+ microservices spanning 30+ countries.
+- **Handover Difficulty**: Most knowledge is currently held by senior architects. 
+- **Solution Strategy**: Implement an Agentic RAG system (GTS Graph RAG) to ingest detailed microservice documentation and interface maps to allow automated querying.
+
+## Critical Contacts
+- **Technical Lead**: Jane Doe (j.doe@hsbc.com)
+- **Platform Engineering**: Mike Smith (m.smith@hsbc.com)
+- **Project Manager**: Robert Brown (r.brown@hsbc.com)
+
+## Handover Checklist
+1. Review the 60+ Microservice Design Documents (Stored in SharePoint).
+2. Validate current integration maps for the 30 active countries.
+3. Test integration with the upcoming 'Project Genesis' core update.
+4. Finalize the Knowledge Graph in Neo4j for the RAG Handover tool.

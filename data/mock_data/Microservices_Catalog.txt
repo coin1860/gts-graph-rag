@@ -1,0 +1,22 @@
+# BOI Microservices Catalog
+
+The BOI ecosystem consists of over 60 distinct microservices. Below are the core services responsible for transaction lifecycle management:
+
+## 1. Gateway-Service (GS)
+- **Purpose**: Entry point for all external requests.
+- **Functions**: Authentication, Rate Limiting, and Request Transformation.
+- **Dependencies**: Uses Redis for session caching.
+
+## 2. Transaction-Orchestrator (TO)
+- **Purpose**: Managing complex multi-step transaction flows.
+- **Functions**: Ensures ACID compliance across distributed systems using the SAGA pattern.
+- **Downstream**: Interfaces with both Core Banking and Local Legacy systems.
+
+## 3. Data-Mapper-Pro (DMP)
+- **Purpose**: Schema translation.
+- **Functions**: Converts regional ISO formats (e.g., pain.001) into internal canonical models.
+- **Config**: Uses dynamic rules stored in MongoDB.
+
+## 4. Compliance-Checker (CC)
+- **Purpose**: Real-time screening.
+- **Functions**: Validates transactions against global AML (Anti-Money Laundering) and KYC lists before final submission.

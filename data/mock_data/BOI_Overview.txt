@@ -1,0 +1,15 @@
+# Project Overview: Back Office Integration (BOI)
+
+## System Role
+The BOI (Back Office Integration) system serves as the primary integration layer for HSBC's global transaction systems. It facilitates the flow of data between front-end trading platforms and various back-office core banking systems.
+
+## Global Scope
+- **Geographic Coverage**: Integrated across 32 countries.
+- **Service Entities**: Connects with over 60 HSBC legal entities globally.
+- **Scale**: Handles high-volume transaction processing for wealth management, retail banking, and commercial banking divisions.
+
+## Key Architect
+The lead system architect for BOI is Shane. He has overseen the technical transition and integration strategy for the past three years. Note: Shane is transitioning to a dedicated engineering track starting next month.
+
+## Architecture Pattern
+The system is built on a microservices architecture to ensure high availability and regional scalability. Each service is containerized and deployed across multi-zone clusters.
