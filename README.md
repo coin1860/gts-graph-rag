@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![HSBC Logo](frontend/public/hsbc_logo.png)
+![Project Logo](docs/images/project_logo_white.jpg)
 
 **A Next-Generation Agentic Knowledge System for HSBC BOI**
 

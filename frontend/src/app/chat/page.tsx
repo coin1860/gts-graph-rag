@@ -889,7 +889,7 @@ export default function ChatPage() {
                     <div className="chat-messages">
                         {messages.length === 0 && !currentAnswer && (
                             <div className="text-center mt-20 flex flex-col items-center">
-                                <img src="/hsbc_logo.png" alt="HSBC Logo" style={{ height: 60, width: "auto", marginBottom: "1rem" }} />
+                                <img src="/project_logo.png" alt="BOI Knowledge Assistant" style={{ height: 120, width: "auto", marginBottom: "1.5rem" }} />
                                 <h2 className="text-2xl font-semibold mb-2 text-[var(--hsbc-red)]">BOI Knowledge Assistant</h2>
                                 <p className="text-[var(--muted)] text-lg">Ask questions about your BOI design documents</p>
                             </div>
