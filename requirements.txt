@@ -1,0 +1,49 @@
+# Core Dependencies for GTS GraphRAG
+# Install with: pip install -r requirements.txt
+
+# LangGraph & LangChain
+langgraph>=0.2.0
+langchain>=0.3.0
+langchain-community>=0.3.0
+langchain-openai>=1.1.6
+langchain-experimental>=0.4.1
+langchain-neo4j>=0.6.0
+
+# Neo4j GraphRAG
+neo4j>=5.23.0
+neo4j-graphrag>=1.0.0
+
+# Vector Store
+chromadb>=0.5.0
+
+# LLM & Embeddings (DashScope)
+openai>=1.50.0
+dashscope>=1.20.0
+
+# FastAPI Server
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.12
+sse-starlette>=2.1.0
+
+# Document Processing
+pypdf>=5.0.0
+openpyxl>=3.1.2
+python-docx>=1.1.0
+unstructured>=0.15.0
+pymupdf>=1.26.7
+
+# Configuration
+pydantic-settings>=2.5.0
+python-dotenv>=1.0.0
+
+# Auth & Database
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+sqlalchemy>=2.0.0
+bcrypt==4.0.1
+
+# URL Parsing for temp knowledge
+beautifulsoup4>=4.12.0
+httpx>=0.27.0
+aiohttp>=3.9.0

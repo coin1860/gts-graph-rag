@@ -103,7 +103,7 @@ graph TD
 
 ### Prerequisites
 
-1.  **Python 3.11+** (Managed via `uv` recommended)
+1.  **Python 3.11+**
 2.  **Node.js 18+** & npm
 3.  **Neo4j Instance**:
     *   Docker: `docker run -p 7474:7474 -p 7687:7687 neo4j`
@@ -118,8 +118,10 @@ graph TD
 git clone https://github.com/coin1860/gts-graph-rag.git
 cd gts-graph-rag
 
-# 2. Install Python dependencies (using uv for speed)
-uv sync
+# 2. Create virtual environment and install dependencies
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 
 # 3. Configure Environment
 cp .env.example .env
@@ -143,7 +145,8 @@ npm run dev
 1.  **Start Backend**:
     From the root directory:
     ```bash
-    uv run python -m backend.server
+    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+    python -m backend.server
     ```
     *API documentation available at: http://localhost:8000/docs*
 
@@ -194,7 +197,7 @@ gts-graph-rag/
 
 ```bash
 # Run backend unit tests
-uv run pytest tests/
+pytest tests/
 ```
 
 ---
