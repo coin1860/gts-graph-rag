@@ -9,6 +9,11 @@ from dashscope import TextReRank
 from backend.config import settings
 
 
+def is_rerank_enabled() -> bool:
+    """Check if rerank is enabled in configuration."""
+    return settings.rerank_enabled
+
+
 class DashScopeRerank:
     """DashScope rerank wrapper for gte-rerank model.
     Reranks documents based on relevance to query.
@@ -22,8 +27,12 @@ class DashScopeRerank:
     ):
         self.model = model or settings.rerank_model
 
-        # Set DashScope API key
-        dashscope.api_key = api_key or settings.dashscope_api_key
+        # Set DashScope API key (use rerank-specific key if set, otherwise fallback to llm key)
+        api_key_to_use = api_key or settings.rerank_api_key
+        if not api_key_to_use:
+            # Fallback to LLM API key if rerank API key is not set
+            api_key_to_use = settings.llm_api_key
+        dashscope.api_key = api_key_to_use
 
     def rerank(
         self,
@@ -100,9 +109,16 @@ class DashScopeRerank:
 _rerank_instance: DashScopeRerank | None = None
 
 
-def get_rerank() -> DashScopeRerank:
-    """Get or create the rerank instance."""
+def get_rerank() -> DashScopeRerank | None:
+    """Get or create the rerank instance.
+    
+    Returns None if rerank is not enabled.
+    """
+    if not is_rerank_enabled():
+        return None
+    
     global _rerank_instance
     if _rerank_instance is None:
         _rerank_instance = DashScopeRerank()
     return _rerank_instance
+

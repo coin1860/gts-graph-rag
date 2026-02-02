@@ -11,15 +11,26 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
-    # DashScope (Qwen-Plus & Embeddings)
-    dashscope_api_key: str = Field(..., env="DASHSCOPE_API_KEY")
-    dashscope_base_url: str = Field(
+    # LLM Configuration
+    llm_api_key: str = Field(..., env="LLM_API_KEY")
+    llm_base_url: str = Field(
         default="https://dashscope.aliyuncs.com/compatible-mode/v1",
-        env="DASHSCOPE_BASE_URL"
+        env="LLM_BASE_URL"
     )
     llm_model: str = Field(default="qwen-flash", env="LLM_MODEL")
     llm_temperature: float = Field(default=0.1, env="LLM_TEMPERATURE")
+
+    # Embedding Configuration
+    embedding_api_key: str = Field(..., env="EMBEDDING_API_KEY")
+    embedding_base_url: str = Field(
+        default="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        env="EMBEDDING_BASE_URL"
+    )
     embedding_model: str = Field(default="text-embedding-v1", env="EMBEDDING_MODEL")
+
+    # Rerank Configuration (optional)
+    rerank_enabled: bool = Field(default=False, env="RERANK_ENABLED")
+    rerank_api_key: str = Field(default="", env="RERANK_API_KEY")
     rerank_model: str = Field(default="gte-rerank", env="RERANK_MODEL")
 
     # Neo4j

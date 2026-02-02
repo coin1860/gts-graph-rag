@@ -1,14 +1,15 @@
-"""DashScope text-embedding-v1 wrapper for vector embeddings."""
+"""Embedding model wrapper for vector embeddings.
+Supports OpenAI-compatible API endpoints.
+"""
 
 
-import dashscope
-from dashscope import TextEmbedding
+from openai import OpenAI
 
 from backend.config import settings
 
 
 class DashScopeEmbeddings:
-    """DashScope embeddings wrapper for text-embedding-v1.
+    """Embeddings wrapper using OpenAI-compatible interface.
     Compatible with neo4j-graphrag Embedder interface.
     """
 
@@ -16,12 +17,16 @@ class DashScopeEmbeddings:
         self,
         model: str = None,
         api_key: str = None,
+        base_url: str = None,
         **kwargs
     ):
         self.model = model or settings.embedding_model
 
-        # Set DashScope API key
-        dashscope.api_key = api_key or settings.dashscope_api_key
+        # Use OpenAI-compatible client
+        self.client = OpenAI(
+            api_key=api_key or settings.embedding_api_key,
+            base_url=base_url or settings.embedding_base_url,
+        )
 
     def embed_query(self, text: str) -> list[float]:
         """Generate embedding for a single text query.
@@ -33,15 +38,12 @@ class DashScopeEmbeddings:
             List of floats representing the embedding vector
 
         """
-        response = TextEmbedding.call(
+        response = self.client.embeddings.create(
             model=self.model,
             input=text,
         )
 
-        if response.status_code != 200:
-            raise Exception(f"Embedding failed: {response.message}")
-
-        return response.output["embeddings"][0]["embedding"]
+        return response.data[0].embedding
 
     def embed_documents(self, texts: list[str]) -> list[list[float]]:
         """Generate embeddings for multiple documents.
@@ -53,25 +55,18 @@ class DashScopeEmbeddings:
             List of embedding vectors
 
         """
-        # DashScope supports batch embedding
-        # Process in batches of 25 (API limit)
+        # Process in batches of 25 (API limit for some providers)
         embeddings = []
         batch_size = 25
 
         for i in range(0, len(texts), batch_size):
             batch = texts[i:i + batch_size]
-            response = TextEmbedding.call(
+            response = self.client.embeddings.create(
                 model=self.model,
                 input=batch,
             )
 
-            if response.status_code != 200:
-                raise Exception(f"Embedding failed: {response.message}")
-
-            batch_embeddings = [
-                item["embedding"]
-                for item in response.output["embeddings"]
-            ]
+            batch_embeddings = [item.embedding for item in response.data]
             embeddings.extend(batch_embeddings)
 
         return embeddings
@@ -96,3 +91,4 @@ def get_embeddings() -> DashScopeEmbeddings:
     if _embeddings_instance is None:
         _embeddings_instance = DashScopeEmbeddings()
     return _embeddings_instance
+

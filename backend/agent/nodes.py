@@ -13,7 +13,7 @@ from backend.config import settings
 from backend.ingestion.ingest import get_chroma_collection
 from backend.models.embeddings import get_embeddings
 from backend.models.llm import get_langchain_llm, get_llm
-from backend.models.rerank import get_rerank
+from backend.models.rerank import get_rerank, is_rerank_enabled
 
 # =============================================================================
 # Global Singletons (initialized lazily, not on every request)
@@ -166,27 +166,28 @@ def vector_retriever(state: AgentState) -> dict:
     # Sort by initial score
     all_results.sort(key=lambda x: x.get("score", 0), reverse=True)
 
-    # Apply reranking if we have results
-    if all_results:
+    # Apply reranking if enabled and we have results
+    if all_results and is_rerank_enabled():
         steps.append("🔄 Reranking results for relevance...")
         try:
             reranker = get_rerank()
-            reranked_results = reranker.rerank(
-                query=question,
-                documents=all_results,
-                top_n=settings.vector_search_results,
-                min_score=settings.min_relevance_score,
-            )
-            steps.append(f"✅ Found {len(reranked_results)} relevant chunks after reranking")
-            # Output to vector_context (will be merged by reranker node)
-            return {
-                "vector_context": reranked_results,
-                "steps": steps,
-            }
+            if reranker:
+                reranked_results = reranker.rerank(
+                    query=question,
+                    documents=all_results,
+                    top_n=settings.vector_search_results,
+                    min_score=settings.min_relevance_score,
+                )
+                steps.append(f"✅ Found {len(reranked_results)} relevant chunks after reranking")
+                # Output to vector_context (will be merged by reranker node)
+                return {
+                    "vector_context": reranked_results,
+                    "steps": steps,
+                }
         except Exception as e:
             steps.append(f"⚠️ Rerank warning: {str(e)[:50]}, using original scores")
 
-    # Fallback: use original scoring
+    # Fallback: use original scoring (or if rerank is disabled)
     top_results = all_results[:settings.vector_search_results]
     steps.append(f"✅ Found {len(top_results)} relevant chunks from vector search")
 
@@ -460,29 +461,34 @@ def reranker(state: AgentState) -> dict:
     if len(unique_context) < len(all_context):
         steps.append(f"🔍 Removed {len(all_context) - len(unique_context)} duplicates")
 
-    # Apply unified reranking
-    try:
-        reranker_model = get_rerank()
-        reranked = reranker_model.rerank(
-            query=question,
-            documents=unique_context,
-            top_n=settings.vector_search_results,
-            min_score=settings.min_relevance_score,
-        )
-        steps.append(f"✅ Reranked to top {len(reranked)} results")
-        return {
-            "context": reranked,
-            "steps": steps,
-        }
-    except Exception as e:
-        print(f"⚠️ Rerank failed: {e}")
-        steps.append("⚠️ Rerank failed, using original order")
-        # Fallback: sort by existing score
-        unique_context.sort(key=lambda x: x.get("score", 0), reverse=True)
-        return {
-            "context": unique_context[:settings.vector_search_results],
-            "steps": steps,
-        }
+    # Apply unified reranking only if enabled
+    if is_rerank_enabled():
+        try:
+            reranker_model = get_rerank()
+            if reranker_model:
+                reranked = reranker_model.rerank(
+                    query=question,
+                    documents=unique_context,
+                    top_n=settings.vector_search_results,
+                    min_score=settings.min_relevance_score,
+                )
+                steps.append(f"✅ Reranked to top {len(reranked)} results")
+                return {
+                    "context": reranked,
+                    "steps": steps,
+                }
+        except Exception as e:
+            print(f"⚠️ Rerank failed: {e}")
+            steps.append("⚠️ Rerank failed, using original order")
+    else:
+        steps.append("ℹ️ Rerank disabled, using original order")
+
+    # Fallback: sort by existing score (or if rerank is disabled)
+    unique_context.sort(key=lambda x: x.get("score", 0), reverse=True)
+    return {
+        "context": unique_context[:settings.vector_search_results],
+        "steps": steps,
+    }
 
 
 def grader(state: AgentState) -> dict:
