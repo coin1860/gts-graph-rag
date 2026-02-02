@@ -41,9 +41,12 @@ python-dotenv
 python-jose[cryptography]
 passlib[bcrypt]
 sqlalchemy
-bcrypt
+bcrypt==4.0.1
 
 # URL Parsing for temp knowledge
 beautifulsoup4
 httpx
 aiohttp
+
+# MCP Server for GitHub Copilot integration
+fastmcp

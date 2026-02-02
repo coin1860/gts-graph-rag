@@ -67,6 +67,10 @@ class Settings(BaseSettings):
     chunk_size: int = Field(default=500, env="CHUNK_SIZE")
     chunk_overlap: int = Field(default=100, env="CHUNK_OVERLAP")
 
+    # MCP Configuration
+    mcp_default_org: str = Field(default="BOI Batch", env="MCP_DEFAULT_ORG")
+    mcp_search_top_k: int = Field(default=3, env="MCP_SEARCH_TOP_K")
+
     # Prompt Templates
     grader_prompt: str = Field(
         default="""Evaluate if the following context contains ANY information related to the question.

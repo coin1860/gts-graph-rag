@@ -18,6 +18,7 @@ from backend.routers import (
     temp_routes,
     users,
 )
+from backend.mcp_server import mcp
 
 
 @asynccontextmanager
@@ -50,11 +51,16 @@ async def lifespan(app: FastAPI):
     finally:
         db.close()
 
+    print("✅ MCP server mounted at /mcp")
+
     yield
 
     # Shutdown
     print("👋 Shutting down...")
 
+
+# Create MCP HTTP app
+mcp_app = mcp.http_app(path="/mcp")
 
 # Create FastAPI app
 app = FastAPI(
@@ -82,6 +88,9 @@ app.include_router(users.router)
 app.include_router(documents.router)
 app.include_router(documents.public_router)  # Public document search endpoint
 
+# Mount MCP server for GitHub Copilot and other MCP clients
+app.mount("/mcp", mcp_app)
+
 
 @app.get("/")
 async def root():
@@ -90,6 +99,7 @@ async def root():
         "name": "GTS Graph RAG API",
         "version": "1.0.0",
         "docs": "/docs",
+        "mcp": "/mcp",
     }
 
 
